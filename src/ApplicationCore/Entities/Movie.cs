@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace ApplicationCore.Entities
 {
@@ -9,5 +10,6 @@ namespace ApplicationCore.Entities
         public DateTime DateCreated { get; set; }
         public bool Active { get; set; }
         public Genre Genre { get; set; }
+        public ICollection<MovieRental> MovieRentals { get; set; }
     }
 }

@@ -10,6 +10,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Data;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Services;
+using Infrastructure.Repository;
+using ApplicationCore.Interfaces.Repository;
 
 namespace Web
 {
@@ -25,6 +29,9 @@ namespace Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped(typeof(IEfBaseRepository<>), typeof(EfBaseRepository<>));
+            services.AddScoped<IGenreRepository, GenreRepository>();
+            
             services.AddDbContext<ProjMoviesContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("Defaultconnection"), b => b.MigrationsAssembly("Web"));

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace ApplicationCore.Entities
 {
     public class User

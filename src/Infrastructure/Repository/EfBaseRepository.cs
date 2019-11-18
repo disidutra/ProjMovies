@@ -1,46 +1,46 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ApplicationCore.Interfaces;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationCore.Services
 {
-    public class EfBaseRepository<TEntity> : IDisposable, IEfBaseRepository<TEntity> where TEntity : class
+    public class EfBaseRepository<TEntity> : IEfBaseRepository<TEntity> where TEntity : class
     {
-        private readonly IEfBaseRepository<TEntity> _base_service;
+        protected readonly ProjMoviesContext _base_context;
 
-        public EfBaseRepository(IEfBaseRepository<TEntity> BaseService)
+        public EfBaseRepository(ProjMoviesContext baseContext)
         {
-            _base_service = BaseService;
+            _base_context = baseContext;
         }
 
-        public void Add(TEntity obj)
+        public async Task Add(TEntity obj)
         {
-            _base_service.Add(obj);
+            await _base_context.Set<TEntity>().AddAsync(obj);
+            await _base_context.SaveChangesAsync();
         }
 
-        public void Dispose()
+        public async Task<TEntity> GetById(int id)
         {
-            _base_service.Dispose();
+            return await _base_context.Set<TEntity>().FindAsync(id);
+        }
+        public async Task<IEnumerable<TEntity>> GetAll()
+        {
+            return await _base_context.Set<TEntity>().ToListAsync();
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public async Task Remove(TEntity obj)
         {
-            return _base_service.GetAll();
+            _base_context.Set<TEntity>().Remove(obj);
+            await _base_context.SaveChangesAsync();
         }
 
-        public TEntity GetById(int id)
+        public async Task Update(TEntity obj)
         {
-            return _base_service.GetById(id);
-        }
-
-        public void Remove(TEntity obj)
-        {
-            _base_service.Remove(obj);
-        }
-
-        public void Update(TEntity obj)
-        {
-            _base_service.Update(obj);
+            _base_context.Entry(obj).State = EntityState.Modified;
+            await _base_context.SaveChangesAsync();
         }
     }
 }

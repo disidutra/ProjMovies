@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Web.Migrations
 {
     [DbContext(typeof(ProjMoviesContext))]
-    [Migration("20191115202401_Initial")]
+    [Migration("20191117123810_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,6 +68,28 @@ namespace Web.Migrations
                     b.ToTable("Movies");
                 });
 
+            modelBuilder.Entity("ApplicationCore.Entities.MovieRental", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RentalId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("RentalId");
+
+                    b.ToTable("MovieRental");
+                });
+
             modelBuilder.Entity("ApplicationCore.Entities.Rental", b =>
                 {
                     b.Property<int>("Id")
@@ -86,28 +108,6 @@ namespace Web.Migrations
                     b.HasIndex("UserCPF");
 
                     b.ToTable("Rentals");
-                });
-
-            modelBuilder.Entity("ApplicationCore.Entities.RentalMovie", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RetalId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MovieId");
-
-                    b.HasIndex("RetalId");
-
-                    b.ToTable("RentalMovies");
                 });
 
             modelBuilder.Entity("ApplicationCore.Entities.User", b =>
@@ -133,22 +133,22 @@ namespace Web.Migrations
                         .HasForeignKey("GenreId");
                 });
 
+            modelBuilder.Entity("ApplicationCore.Entities.MovieRental", b =>
+                {
+                    b.HasOne("ApplicationCore.Entities.Movie", "Movie")
+                        .WithMany("MovieRentals")
+                        .HasForeignKey("MovieId");
+
+                    b.HasOne("ApplicationCore.Entities.Rental", "Rental")
+                        .WithMany("MovieRentals")
+                        .HasForeignKey("RentalId");
+                });
+
             modelBuilder.Entity("ApplicationCore.Entities.Rental", b =>
                 {
                     b.HasOne("ApplicationCore.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserCPF");
-                });
-
-            modelBuilder.Entity("ApplicationCore.Entities.RentalMovie", b =>
-                {
-                    b.HasOne("ApplicationCore.Entities.Movie", "Movie")
-                        .WithMany()
-                        .HasForeignKey("MovieId");
-
-                    b.HasOne("ApplicationCore.Entities.Rental", "Retal")
-                        .WithMany()
-                        .HasForeignKey("RetalId");
                 });
 #pragma warning restore 612, 618
         }

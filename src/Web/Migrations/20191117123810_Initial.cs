@@ -78,45 +78,45 @@ namespace Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RentalMovies",
+                name: "MovieRental",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RetalId = table.Column<int>(nullable: true),
-                    MovieId = table.Column<int>(nullable: true)
+                    MovieId = table.Column<int>(nullable: true),
+                    RentalId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RentalMovies", x => x.Id);
+                    table.PrimaryKey("PK_MovieRental", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RentalMovies_Movies_MovieId",
+                        name: "FK_MovieRental_Movies_MovieId",
                         column: x => x.MovieId,
                         principalTable: "Movies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_RentalMovies_Rentals_RetalId",
-                        column: x => x.RetalId,
+                        name: "FK_MovieRental_Rentals_RentalId",
+                        column: x => x.RentalId,
                         principalTable: "Rentals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Movies_GenreId",
-                table: "Movies",
-                column: "GenreId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RentalMovies_MovieId",
-                table: "RentalMovies",
+                name: "IX_MovieRental_MovieId",
+                table: "MovieRental",
                 column: "MovieId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RentalMovies_RetalId",
-                table: "RentalMovies",
-                column: "RetalId");
+                name: "IX_MovieRental_RentalId",
+                table: "MovieRental",
+                column: "RentalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Movies_GenreId",
+                table: "Movies",
+                column: "GenreId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Rentals_UserCPF",
@@ -127,7 +127,7 @@ namespace Web.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "RentalMovies");
+                name: "MovieRental");
 
             migrationBuilder.DropTable(
                 name: "Movies");

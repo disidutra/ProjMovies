@@ -1,0 +1,84 @@
+@model IEnumerable<Genre>
+@{
+    ViewData["Title"] = ViewBag.Title;
+}
+
+<form>
+    <button asp-action="Form" class="btn btn-primary btn-new float-right" title="New">Genre<i class="fas fa-plus"></i></button>
+</form>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Created</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var item in Model)
+    {
+        <tr id="item-@item.Id">
+          <th scope="row">@item.Id</th>
+          <td>@item.Name</td>
+          <td>@item.DateCreated</td>
+          <td>            
+            <a asp-action="Form" asp-route-id="@item.Id" class="btn btn-light" title="Edit"><i class="fas fa-edit"></i></a>
+            <button onclick="modalDeleteShow(@item.Id)" class="btn btn-light" title="Delete"><i class="fas fa-trash"></i></button>            
+          </td>
+        </tr>
+    }
+  </tbody>
+</table>
+
+<!-- Modal Delete -->
+<div class="modal" tabindex="-1" role="dialog" data-id="0" id="modal-delete">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Confirm deletion of this item?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="confirmDelete()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section scripts{
+  <script>
+    function modalDeleteShow(id) {
+      $('#modal-delete').data('id',id).modal('show');
+    }
+
+    var _url = '@Url.Action("Delete")';
+
+    function confirmDelete() {
+        var _id = $('#modal-delete').data('id');
+        //alert('ok - ' + _id);
+        $.ajax({
+            url: _url,
+            data: {id:_id},
+            dataType: 'json',
+            type: 'delete',
+            success: function () {
+                
+             },
+            error: function () {
+                
+             },
+            complete: function () {
+                $('#modal-delete').data('id', '0').modal('hide');
+                $('#item-' + _id).remove();
+             }
+        });
+    }
+  </script>
+}

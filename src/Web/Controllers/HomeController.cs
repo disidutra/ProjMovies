@@ -20,6 +20,7 @@ namespace Web.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Title = "Rentals";
             return View();
         }
 
