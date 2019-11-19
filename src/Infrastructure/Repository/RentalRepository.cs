@@ -5,9 +5,8 @@ using Infrastructure.Data;
 
 namespace Infrastructure.Repository
 {
-    public class GenreRepository : EfBaseRepository<Genre>, IGenreRepository
+    public class RentalRepository: EfBaseRepository<Rental>, IRentalRepository
     {
-        public GenreRepository(ProjMoviesContext dbContext) : base(dbContext) {
-        }
+        public RentalRepository(ProjMoviesContext dbContext) : base(dbContext){}
     }
 }

@@ -44,7 +44,7 @@ namespace Web.Migrations
                     Name = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
-                    GenreId = table.Column<int>(nullable: true)
+                    GenreId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,7 +54,7 @@ namespace Web.Migrations
                         column: x => x.GenreId,
                         principalTable: "Genres",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -63,15 +63,15 @@ namespace Web.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserCPF = table.Column<string>(nullable: true),
+                    USerId = table.Column<string>(nullable: true),
                     DateRental = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rentals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Rentals_Users_UserCPF",
-                        column: x => x.UserCPF,
+                        name: "FK_Rentals_Users_USerId",
+                        column: x => x.USerId,
                         principalTable: "Users",
                         principalColumn: "CPF",
                         onDelete: ReferentialAction.Restrict);
@@ -83,8 +83,8 @@ namespace Web.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MovieId = table.Column<int>(nullable: true),
-                    RentalId = table.Column<int>(nullable: true)
+                    MovieId = table.Column<int>(nullable: false),
+                    RentalId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -94,13 +94,13 @@ namespace Web.Migrations
                         column: x => x.MovieId,
                         principalTable: "Movies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MovieRental_Rentals_RentalId",
                         column: x => x.RentalId,
                         principalTable: "Rentals",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -119,9 +119,9 @@ namespace Web.Migrations
                 column: "GenreId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rentals_UserCPF",
+                name: "IX_Rentals_USerId",
                 table: "Rentals",
-                column: "UserCPF");
+                column: "USerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

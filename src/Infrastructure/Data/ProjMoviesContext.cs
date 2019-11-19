@@ -16,7 +16,5 @@ namespace Infrastructure.Data
         {
             modelBuilder.Entity<User>().HasKey(e => e.CPF);
         }
-
-
     }
 }

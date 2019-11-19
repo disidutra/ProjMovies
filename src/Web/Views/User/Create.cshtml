@@ -1,4 +1,22 @@
-
+@model User
 @{
     ViewData["Title"] = "Create User";
 }
+
+<form asp-action="Create">  
+  <div class="form-group">
+    <label for="Name">CPF</label>
+    <input type="text" asp-for="CPF" class="form-control" placeholder="Name" autofocus>    
+  </div>  
+
+  <div class="form-group">
+    <label for="Name">Name</label>
+    <input type="text" asp-for="Name" class="form-control" placeholder="Name" autofocus>    
+  </div>  
+
+  <div class="form-group">
+    <label for="Name">Password</label>
+    <input type="text" asp-for="Password" class="form-control" placeholder="Name" autofocus>    
+  </div>    
+  <button type="submit" class="btn btn-primary">Save</button>
+</form>

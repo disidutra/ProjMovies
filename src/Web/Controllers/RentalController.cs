@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
@@ -7,18 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
-    public class GenreController : Controller
+    public class RentalController : Controller
     {
-        private readonly IEfBaseRepository<Genre> _base_repository;
-        public GenreController(IEfBaseRepository<Genre> baseRepository)
+        private readonly IEfBaseRepository<Rental> _base_repository;
+        public RentalController(IEfBaseRepository<Rental> baseRepository)
         {
             _base_repository = baseRepository;
         }
         public async Task<IActionResult> Index()
         {
-            ViewBag.Title = "Genres";
+            ViewBag.Title = "Rentals";
             var model = await _base_repository.GetAll();
-            return View(model.OrderBy(x => x.Name));
+            return View(model);
         }
 
         [HttpGet]
@@ -30,18 +29,18 @@ namespace Web.Controllers
                 var model = await _base_repository.GetById(id ?? 0);
                 if (model != null)
                 {
-                    ViewBag.Title = "Edit genre";
+                    ViewBag.Title = "Edit Rental";
                     return View(model);
                 }
 
             }
-            ViewBag.Title = "Create genre";
+            ViewBag.Title = "Create rental";
             return View();
 
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrUpdate(Genre model)
+        public async Task<IActionResult> CreateOrUpdate(Rental model)
         {
             if (model.Id != 0)
             {
@@ -49,7 +48,7 @@ namespace Web.Controllers
             }
             else
             {
-                model.DateCreated = DateTime.Now;
+                model.DateRental = DateTime.Now;
                 await _base_repository.Add(model);
             }
 

@@ -1,16 +1,17 @@
-@model IEnumerable<Genre>
+@model IEnumerable<Movie>
 @{
     ViewData["Title"] = ViewBag.Title;
 }
 
 <form>
-    <button asp-action="Form" class="btn btn-primary btn-new float-right" title="New">Genre<i class="fas fa-plus"></i></button>
+    <button asp-action="Form" class="btn btn-primary btn-new float-right" title="New">Movie<i class="fas fa-plus"></i></button>
 </form>
 <table class="table table-hover">
   <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col">Name</th>
+      <th scope="col">Genre</th>
       <th scope="col">Active</th>
       <th scope="col">Created</th>
       <th scope="col"></th>
@@ -22,6 +23,7 @@
         <tr id="item-@item.Id">
           <th scope="row">@item.Id</th>
           <td>@item.Name</td>
+          <td>@item.Genre</td>
           <td>@(item.Active ? "Yes" : "No")</td>
           <td>@item.DateCreated</td>
           <td>            

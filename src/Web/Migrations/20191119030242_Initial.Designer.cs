@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Web.Migrations
 {
     [DbContext(typeof(ProjMoviesContext))]
-    [Migration("20191117123810_Initial")]
+    [Migration("20191119030242_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,7 +55,7 @@ namespace Web.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("GenreId")
+                    b.Property<int>("GenreId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -75,10 +75,10 @@ namespace Web.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("MovieId")
+                    b.Property<int>("MovieId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RentalId")
+                    b.Property<int>("RentalId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -100,12 +100,12 @@ namespace Web.Migrations
                     b.Property<DateTime>("DateRental")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserCPF")
+                    b.Property<string>("USerId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserCPF");
+                    b.HasIndex("USerId");
 
                     b.ToTable("Rentals");
                 });
@@ -129,26 +129,32 @@ namespace Web.Migrations
             modelBuilder.Entity("ApplicationCore.Entities.Movie", b =>
                 {
                     b.HasOne("ApplicationCore.Entities.Genre", "Genre")
-                        .WithMany()
-                        .HasForeignKey("GenreId");
+                        .WithMany("Movies")
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ApplicationCore.Entities.MovieRental", b =>
                 {
                     b.HasOne("ApplicationCore.Entities.Movie", "Movie")
                         .WithMany("MovieRentals")
-                        .HasForeignKey("MovieId");
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ApplicationCore.Entities.Rental", "Rental")
                         .WithMany("MovieRentals")
-                        .HasForeignKey("RentalId");
+                        .HasForeignKey("RentalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ApplicationCore.Entities.Rental", b =>
                 {
                     b.HasOne("ApplicationCore.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserCPF");
+                        .WithMany("Rentals")
+                        .HasForeignKey("USerId");
                 });
 #pragma warning restore 612, 618
         }

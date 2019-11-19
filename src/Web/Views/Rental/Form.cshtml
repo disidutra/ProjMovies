@@ -1,0 +1,18 @@
+ @model Rental
+<!--@{
+    ViewData["Title"] = ViewBag.Title;
+}
+
+<form asp-action="CreateOrUpdate">
+  <input type="hidden" asp-for="Id" >
+  <input type="hidden" asp-for="DateRental" >
+  <div class="form-group">
+    <label for="Name">Movies</label>
+    <select asp-for="GenreId" asp-items="@ViewBag.GenreList" class="form-control" placeholder="Select...">            
+    </select>
+
+  </div>  
+
+  <button class="btn btn-light" asp-action="Index">Cancel</button>
+  <button type="submit" class="btn btn-primary">Save</button>
+</form> -->
