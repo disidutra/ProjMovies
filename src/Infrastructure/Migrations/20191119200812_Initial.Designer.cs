@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Web.Migrations
+namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ProjMoviesContext))]
-    [Migration("20191119030242_Initial")]
+    [Migration("20191119200812_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -100,12 +100,12 @@ namespace Web.Migrations
                     b.Property<DateTime>("DateRental")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("USerId")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("USerId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Rentals");
                 });
@@ -154,7 +154,7 @@ namespace Web.Migrations
                 {
                     b.HasOne("ApplicationCore.Entities.User", "User")
                         .WithMany("Rentals")
-                        .HasForeignKey("USerId");
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

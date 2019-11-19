@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Web.Migrations
+namespace Infrastructure.Migrations
 {
     public partial class Initial : Migration
     {
@@ -63,15 +63,15 @@ namespace Web.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    USerId = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
                     DateRental = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rentals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Rentals_Users_USerId",
-                        column: x => x.USerId,
+                        name: "FK_Rentals_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "CPF",
                         onDelete: ReferentialAction.Restrict);
@@ -119,9 +119,9 @@ namespace Web.Migrations
                 column: "GenreId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rentals_USerId",
+                name: "IX_Rentals_UserId",
                 table: "Rentals",
-                column: "USerId");
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -34,7 +34,7 @@ namespace Web
             
             services.AddDbContext<ProjMoviesContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("Defaultconnection"), b => b.MigrationsAssembly("Web"));
+                options.UseSqlServer(Configuration.GetConnectionString("Defaultconnection"), b => b.MigrationsAssembly("Infrastructure"));
             });
 
             services.AddControllersWithViews();
