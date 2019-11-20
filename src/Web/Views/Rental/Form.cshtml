@@ -1,4 +1,4 @@
- @model Rental
+ @model RentalFormViewModel
 @{
     ViewData["Title"] = ViewBag.Title;
 }
@@ -6,7 +6,7 @@
 <form asp-action="CreateOrUpdate">
   <input type="hidden" asp-for="Id" >
   <input type="hidden" asp-for="UserId" >
-  <input type="hidden" asp-for="DateRental" >
+  <input type="hidden" asp-for="DateRental" > 
 
   <table class="table table-hover">
     <thead>
@@ -25,22 +25,27 @@
       </tr>
     </thead>
     <tbody style="height: 100px !important; overflow: scroll;">
-      @foreach (var item in ViewBag.MovieList)
+      @for (int i = 0; i < Model.MovieRentals.Count; i++)
       {
-          <tr id="item-@item.Id">
-            <th scope="row">
-              <input type="checkbox" id="cb-movie-@item.Id" value="@item.Id" title="Rental movie">
-            </th>
-            <td>@item.Name</td>
-            <td>@item.Genre</td>
-            <td>
-              @(item.Active ? "Yes" : "No")
-            </td>
-            <td>
-              @item.DateCreated.ToString("dd/MM/YYYY")
-            </td>
-            <td></td>
-          </tr>
+        <input type="hidden" asp-for="@Model.MovieRentals[i].Id" />
+        <input type="hidden" asp-for="@Model.MovieRentals[i].Name" />
+        <input type="hidden" asp-for="@Model.MovieRentals[i].DateCreated" />
+        <input type="hidden" asp-for="@Model.MovieRentals[i].Active" />
+        <input type="hidden" asp-for="@Model.MovieRentals[i].GenreId" />
+        <tr id="item-@Model.MovieRentals[i].Id">
+          <th scope="row">              
+            <input type="checkbox" asp-for="@Model.MovieRentals[i].Rental" title="Rental movie">                                   
+          </th>
+          <td>@Model.MovieRentals[i].Name</td>
+          <td>@Model.MovieRentals[i].GenreId</td>
+          <td>
+            @(Model.MovieRentals[i].Active ? "Yes" : "No")
+          </td>
+          <td>
+            @Model.MovieRentals[i].DateCreated.ToString("dd/MM/yyyy")
+          </td>
+          <td></td>
+        </tr>
       }
     </tbody>
   </table>

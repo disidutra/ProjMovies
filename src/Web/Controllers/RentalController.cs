@@ -5,20 +5,24 @@ using System.Threading.Tasks;
 using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Web.Interfaces.Rental;
+using Web.Models;
 
 namespace Web.Controllers
 {
     public class RentalController : Controller
     {
-        private readonly IEfBaseRepository<Rental> _base_repository;
-        private readonly IEfBaseRepository<Movie> _base_repository_movie;
+
+        private readonly IRentalFormViewModelService _base_repository;
+        private readonly IEfBaseRepository<Rental> _base_repository_rental;
         public RentalController(
-            IEfBaseRepository<Rental> baseRepository,
-            IEfBaseRepository<Movie> baseRepositoryMovie
+            IRentalFormViewModelService baseRepository,
+            IEfBaseRepository<Rental> baseRepositoryRental
             )
         {
             _base_repository = baseRepository;
-            _base_repository_movie = baseRepositoryMovie;
+            _base_repository_rental = baseRepositoryRental;
+            
         }
         public async Task<IActionResult> Index()
         {
@@ -29,34 +33,28 @@ namespace Web.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Form(int? id)
-        {
-            var movies = await _base_repository_movie.GetAll();
-            ViewBag.MovieList = movies.OrderBy(x => x.Name);
-            if (id != null)
-            {
-                var model = await _base_repository.GetById(id ?? 0);
-                if (model != null)
-                {
-                    ViewBag.Title = "Edit rental";
-                    return View(model);
-                }
-            }
+        {            
+            var resultModel = await _base_repository.GetById(id);
             ViewBag.Title = "Create rental";
-            return View();
+            resultModel.UserId = "001122";
+
+            return View(resultModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrUpdate(Rental model)
+        public async Task<IActionResult> CreateOrUpdate(RentalFormViewModel model)
         {
-            if (model.Id != 0)
-            {
-                await _base_repository.Update(model);
-            }
-            else
-            {
-                model.DateRental = DateTime.Now;
-                await _base_repository.Add(model);
-            }
+            await _base_repository.Add(model);
+            // if (model.Id != 0)
+            // {
+            //     await _base_repository.Update(model);
+            // }
+            // else
+            // {
+            //     model.DateRental = DateTime.Now;
+            //     await _base_repository.Add(model);
+            
+            // }
 
             return RedirectToAction("Index");
         }
@@ -64,23 +62,10 @@ namespace Web.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            var item = await _base_repository.GetById(id);
+            var item = await _base_repository_rental.GetById(id);
             if (item != null)
             {
-                await _base_repository.Remove(item);
-                return NoContent();
-            }
-            return NoContent();
-        }
-
-        [HttpDelete]
-        public async Task<IActionResult> DeleteRange(IEnumerable<int> items)
-        {
-            var itemsDelete = await _base_repository.GetRangeById(items);
-            
-            if (itemsDelete.Any())
-            {
-                await _base_repository.RemoveRange(itemsDelete);
+                await _base_repository_rental.Remove(item);
                 return NoContent();
             }
             return NoContent();

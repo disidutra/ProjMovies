@@ -30,7 +30,7 @@
             @(item.Active ? "Yes" : "No")
           </td>
           <td>
-            @item.DateCreated.ToString("dd/MM/YYYY")
+            @item.DateCreated.ToString("dd/MM/yyyy")
           </td>
           <td>            
             <a asp-action="Form" asp-route-id="@item.Id" class="btn btn-light" title="Edit"><i class="fas fa-edit"></i></a>

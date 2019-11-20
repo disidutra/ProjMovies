@@ -25,7 +25,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Create(User model)
         {       
             await _base_repository.Add(model);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Rental");
         }
     }
 

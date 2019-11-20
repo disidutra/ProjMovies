@@ -14,6 +14,8 @@ using ApplicationCore.Interfaces;
 using ApplicationCore.Services;
 using Infrastructure.Repository;
 using ApplicationCore.Interfaces.Repository;
+using ApplicationCore.Interfaces.Service;
+using Web.Interfaces.Rental;
 
 namespace Web
 {
@@ -31,6 +33,7 @@ namespace Web
         {
             services.AddScoped(typeof(IEfBaseRepository<>), typeof(EfBaseRepository<>));
             services.AddScoped<IGenreRepository, GenreRepository>();
+               services.AddScoped<IRentalFormViewModelService, RentalFormViewModelService>();
             
             services.AddDbContext<ProjMoviesContext>(options =>
             {

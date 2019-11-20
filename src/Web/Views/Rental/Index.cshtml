@@ -1,4 +1,4 @@
-@model IEnumerable<Rental>
+@model IEnumerable<RentalFormViewModel>
 @{
     ViewData["Title"] = ViewBag.Title;
 }
@@ -9,30 +9,22 @@
 <table class="table table-hover">
   <thead>
     <tr>
-      <th scope="col">
-        <button id="btn-delete-range" onclick="modalDeleteRangeShow()" class="btn btn-light" title="Delete selected" disabled><i class="fas fa-trash"></i></button>
-      </th>
-      <th scope="col">UserID</th>      
-      <th scope="col">Created</th>
+      <th scope="col">Created</th>      
       <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
     @foreach (var item in Model)
     {
-        <tr id="item-@item.Id">
-          <th scope="row">
-            <input type="checkbox" id="cb-delete-@item.Id" value="@item.Id" onclick="checkedClick(this)">
-          </th>
-          <td>@item.UserId</td>          
-          <td>
-            @item.DateRental.ToString("dd/MM/YYYY")
-          </td>
-          <td>            
-            <a asp-action="Form" asp-route-id="@item.Id" class="btn btn-light" title="Edit"><i class="fas fa-edit"></i></a>
-            <button onclick="modalDeleteShow(@item.Id)" class="btn btn-light" title="Delete"><i class="fas fa-trash"></i></button>            
-          </td>
-        </tr>
+      <tr id="item-@item.Id">          
+        <td>
+          @item.DateRental.ToString("dd/MM/yyyy")
+        </td>
+        <td>            
+          <a asp-action="Form" asp-route-id="@item.Id" class="btn btn-light" title="Edit"><i class="fas fa-edit"></i></a>
+          <button onclick="modalDeleteShow(@item.Id)" class="btn btn-light" title="Delete"><i class="fas fa-trash"></i></button>            
+        </td>
+      </tr>
     }
   </tbody>
 </table>
