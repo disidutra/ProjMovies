@@ -32,6 +32,18 @@ namespace ApplicationCore.Services
         {
             return await _base_context.Set<TEntity>().FindAsync(id);
         }
+
+        public async Task<IEnumerable<TEntity>> GetRangeById(IEnumerable<int> list)
+        {
+            var itemsResult = new List<TEntity>();
+            foreach (var id in list)
+            {
+                var result = await _base_context.Set<TEntity>().FindAsync(id);
+                if (result != null) itemsResult.Add(result);
+            }
+            return itemsResult;
+        }
+        
         public async Task<IEnumerable<TEntity>> GetAll()
         {
             return await _base_context.Set<TEntity>().ToListAsync();

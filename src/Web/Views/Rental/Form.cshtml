@@ -1,18 +1,49 @@
  @model Rental
-<!--@{
+@{
     ViewData["Title"] = ViewBag.Title;
 }
 
 <form asp-action="CreateOrUpdate">
   <input type="hidden" asp-for="Id" >
+  <input type="hidden" asp-for="UserId" >
   <input type="hidden" asp-for="DateRental" >
-  <div class="form-group">
-    <label for="Name">Movies</label>
-    <select asp-for="GenreId" asp-items="@ViewBag.GenreList" class="form-control" placeholder="Select...">            
-    </select>
 
-  </div>  
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">
+          <i class="fas fa-shopping-cart" title="Rental movie"></i>
+        </th>
+        <th scope="col">Name</th>
+        <th scope="col">Genre</th>
+        <th scope="col">Active</th>
+        <th scope="col">Created</th>
+        <th scope="col">
+          <button class="btn btn-light" asp-action="Index">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </th>
+      </tr>
+    </thead>
+    <tbody style="height: 100px !important; overflow: scroll;">
+      @foreach (var item in ViewBag.MovieList)
+      {
+          <tr id="item-@item.Id">
+            <th scope="row">
+              <input type="checkbox" id="cb-movie-@item.Id" value="@item.Id" title="Rental movie">
+            </th>
+            <td>@item.Name</td>
+            <td>@item.Genre</td>
+            <td>
+              @(item.Active ? "Yes" : "No")
+            </td>
+            <td>
+              @item.DateCreated.ToString("dd/MM/YYYY")
+            </td>
+            <td></td>
+          </tr>
+      }
+    </tbody>
+  </table>
 
-  <button class="btn btn-light" asp-action="Index">Cancel</button>
-  <button type="submit" class="btn btn-primary">Save</button>
-</form> -->
+  
+</form>

@@ -14,7 +14,7 @@ namespace Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().HasKey(e => e.CPF);
+            modelBuilder.Entity<User>().HasKey(e => e.CPF);            
         }
     }
 }

@@ -4,12 +4,14 @@
 }
 
 <form>
-    <button asp-action="Form" class="btn btn-primary btn-new float-right" title="New">Movie<i class="fas fa-plus"></i></button>
+    <button asp-action="Form" class="btn btn-primary btn-new float-right" title="New">Rental<i class="fas fa-plus"></i></button>
 </form>
 <table class="table table-hover">
   <thead>
     <tr>
-      <th scope="col">#</th>
+      <th scope="col">
+        <button id="btn-delete-range" onclick="modalDeleteRangeShow()" class="btn btn-light" title="Delete selected" disabled><i class="fas fa-trash"></i></button>
+      </th>
       <th scope="col">UserID</th>      
       <th scope="col">Created</th>
       <th scope="col"></th>
@@ -19,9 +21,13 @@
     @foreach (var item in Model)
     {
         <tr id="item-@item.Id">
-          <th scope="row">@item.Id</th>
+          <th scope="row">
+            <input type="checkbox" id="cb-delete-@item.Id" value="@item.Id" onclick="checkedClick(this)">
+          </th>
           <td>@item.UserId</td>          
-          <td>@item.DateRental</td>
+          <td>
+            @item.DateRental.ToString("dd/MM/YYYY")
+          </td>
           <td>            
             <a asp-action="Form" asp-route-id="@item.Id" class="btn btn-light" title="Edit"><i class="fas fa-edit"></i></a>
             <button onclick="modalDeleteShow(@item.Id)" class="btn btn-light" title="Delete"><i class="fas fa-trash"></i></button>            
@@ -32,53 +38,15 @@
 </table>
 
 <!-- Modal Delete -->
-<div class="modal" tabindex="-1" role="dialog" data-id="0" id="modal-delete">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Delete</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Confirm deletion of this item?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="confirmDelete()">Yes</button>
-      </div>
-    </div>
-  </div>
-</div>
+<partial name="_ModalDelete"></partial>
+
+<!-- Modal Delete Range-->
+<partial name="_ModalDeleteRange"></partial>
 
 @section scripts{
+  <script src="~/js/viewsIndex.js" asp-append-version="true"></script>
   <script>
-    function modalDeleteShow(id) {
-      $('#modal-delete').data('id',id).modal('show');
-    }
-
-    var _url = '@Url.Action("Delete")';
-
-    function confirmDelete() {
-        var _id = $('#modal-delete').data('id');
-        //alert('ok - ' + _id);
-        $.ajax({
-            url: _url,
-            data: {id:_id},
-            dataType: 'json',
-            type: 'delete',
-            success: function () {
-                
-             },
-            error: function () {
-                
-             },
-            complete: function () {
-                $('#modal-delete').data('id', '0').modal('hide');
-                $('#item-' + _id).remove();
-             }
-        });
-    }
+    urlDelete = '@Url.Action("Delete")';
+    urlDeleteRange = '@Url.Action("DeleteRange")';
   </script>
 }

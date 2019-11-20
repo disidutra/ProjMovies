@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore.Entities;
@@ -74,6 +75,19 @@ namespace Web.Controllers
             if (item != null)
             {
                 await _base_repository.Remove(item);
+                return NoContent();
+            }
+            return NoContent();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteRange(IEnumerable<int> items)
+        {
+            var itemsDelete = await _base_repository.GetRangeById(items);
+            
+            if (itemsDelete.Any())
+            {
+                await _base_repository.RemoveRange(itemsDelete);
                 return NoContent();
             }
             return NoContent();

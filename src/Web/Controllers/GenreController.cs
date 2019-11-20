@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore.Entities;
@@ -24,7 +25,6 @@ namespace Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Form(int? id)
         {
-
             if (id != null)
             {
                 var model = await _base_repository.GetById(id ?? 0);
@@ -37,7 +37,6 @@ namespace Web.Controllers
             }
             ViewBag.Title = "Create genre";
             return View();
-
         }
 
         [HttpPost]
@@ -63,6 +62,19 @@ namespace Web.Controllers
             if (item != null)
             {
                 await _base_repository.Remove(item);
+                return NoContent();
+            }
+            return NoContent();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteRange(IEnumerable<int> items)
+        {
+            var itemsDelete = await _base_repository.GetRangeById(items);
+            
+            if (itemsDelete.Any())
+            {
+                await _base_repository.RemoveRange(itemsDelete);
                 return NoContent();
             }
             return NoContent();
