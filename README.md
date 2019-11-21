@@ -24,3 +24,14 @@ dotnet ef database update -p src/Infrastructure/ -s src/Web/ -v
 dotnet run -p src/Web/
 ```
 * Após isso, abrir a url [http://localhost:5000](http://localhost:5000) no navegador de sua preferência.
+
+* Projeto inclui:
+  - .Net Core
+  - Sql Server
+  - Entity Framework Core
+  - Dapper
+  - Razor
+  
+-----------
+### O projeto Infraestrutura possui Repositorys com acesso ao banco de dados via Entity Framework e Dapper, pois era requisito no teste em que o projeto se baseou. Idealmente, use apenas um.
+
