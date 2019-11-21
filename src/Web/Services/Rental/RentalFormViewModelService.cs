@@ -10,11 +10,9 @@ namespace ApplicationCore.Interfaces.Service
 {
     public class RentalFormViewModelService : IRentalFormViewModelService
     {
-
         private readonly IEfBaseRepository<Rental> _base_repository_rental;
         private readonly IEfBaseRepository<Movie> _base_repository_movie;
         private readonly IEfBaseRepository<MovieRental> _base_repository_movie_rental;
-
 
         public RentalFormViewModelService(
             IEfBaseRepository<Rental> baseRepositoryRental,
@@ -28,49 +26,64 @@ namespace ApplicationCore.Interfaces.Service
             _base_repository_movie_rental = baseRepositoryMovieRental;
         }
 
-        public async Task<IEnumerable<RentalFormViewModel>> GetAll()
+        // public async Task<IEnumerable<RentalFormViewModel>> GetAll()
+        // {
+        //     var listRentals = new List<RentalFormViewModel>();
+        //     var resultRentals = await _base_repository_rental.GetAll();
+        //     if (resultRentals.Any())
+        //     {
+        //         foreach (var item in resultRentals)
+        //         {
+        //             listRentals.Add(
+        //                 new RentalFormViewModel()
+        //                 {
+        //                     Id = item.Id,
+        //                     DateRental = item.DateRental,
+        //                     UserId = item.UserId
+        //                 }
+        //             );
+        //         }
+        //     }
+
+        //     return listRentals;
+        // }
+
+        // public async Task<IEnumerable<RentalFormViewModel>> GetAllByUserId()
+        // {
+        //     var userId = "001122";
+            
+        //     var listRentals = new List<RentalFormViewModel>();
+        //     var resultRentals = await _base_repository_rental.GetAll();
+        //     var retalUser = resultRentals.Where(x => x.UserId == userId);
+        //     if (resultRentals.Any())
+        //     {
+        //         foreach (var item in resultRentals)
+        //         {
+        //             listRentals.Add(
+        //                 new RentalFormViewModel()
+        //                 {
+        //                     Id = item.Id,
+        //                     DateRental = item.DateRental,
+        //                     UserId = item.UserId
+        //                 }
+        //             );
+        //         }
+        //     }
+
+        //     return listRentals;
+        // }
+        public async Task<RentalFormViewModel> GetRentalForm(Rental obj)
         {
-            var listRentals = new List<RentalFormViewModel>();
-            var resultRentals = await _base_repository_rental.GetAll();
-            if (resultRentals.Any())
+            var result = new RentalFormViewModel();            
+
+            if (obj != null)
             {
-                foreach (var item in resultRentals)
-                {
-                    listRentals.Add(
-                        new RentalFormViewModel()
-                        {
-                            Id = item.Id,
-                            DateRental = item.DateRental,
-                            UserId = item.UserId
-                        }
-                    );
-                }
-            }
+                result.Id = obj.Id;
+                result.DateRental = obj.DateRental;
+                result.UserId = obj.UserId;
+            }            
 
-            return listRentals;
-        }
-        public async Task<RentalFormViewModel> GetById(int? id)
-        {
-            var resultView = new RentalFormViewModel();
-            var resultRental = new Rental();
-
-            // Busca a lista de filmes disponíveis
             var resultMoviesAll = await _base_repository_movie.GetAll();
-
-            // Busca toda lista da tabela RentalMovie
-            //var resultMoviesRental = await _base_repository_movie_rental.GetAll();
-
-            // Busca Rental caso exista, para editar
-            if (id != null)
-            {
-                resultRental = await _base_repository_rental.GetById(id ?? 0);
-                if (resultRental != null)
-                {
-                    resultView.Id = resultRental.Id;
-                    resultView.DateRental = resultRental.DateRental;
-                    resultView.UserId = resultRental.UserId;
-                }
-            }
 
             var listMovies = new List<RentalFormMovieViewModel>();
             foreach (var item in resultMoviesAll)
@@ -83,24 +96,27 @@ namespace ApplicationCore.Interfaces.Service
                     Active = item.Active,
                     GenreId = item.GenreId,
                     // Caso o filme pertença a esse Rental, ele vem setado como True
-                    Rental = false//esultMoviesRental.Where(x => x.MovieId == item.Id || x.RentalId == resultRental.Id).Any() ? true : false
+                    Rental = obj == null ? false : obj.MovieRentals.Where(x=> x.MovieId == item.Id).Any()
                 });
 
-            }
-            resultView.MovieRentals = listMovies;
+            }                       
+            result.MovieRentals = listMovies;
 
-            return resultView;
+            return result;
         }
 
-        public async Task Add(RentalFormViewModel obj)
+        public async Task AddOrUpdate(RentalFormViewModel obj)
         {
+            obj.UserId = "001122";
+
 
             var moviesRental = new List<MovieRental>();
             foreach (var item in obj.MovieRentals.Where(x => x.Rental == true))
             {
                 moviesRental.Add(new MovieRental()
                 {
-                    MovieId = item.Id
+                    MovieId = item.Id,
+                    RentalId = obj.Id
                 });
             }
             var itemAdd = new Rental()
@@ -111,7 +127,12 @@ namespace ApplicationCore.Interfaces.Service
                 MovieRentals = moviesRental
             };
 
-            await _base_repository_rental.Add(itemAdd);
+            if(itemAdd.Id == 0) {
+                itemAdd.DateRental = DateTime.Now;
+                await _base_repository_rental.Add(itemAdd);
+            } else {
+                await _base_repository_rental.Update(itemAdd);
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-@model IEnumerable<Movie>
+@model IEnumerable<MovieGenre>
 @{
     ViewData["Title"] = ViewBag.Title;
 }
@@ -27,7 +27,7 @@
             <input type="checkbox" id="cb-delete-@item.Id" value="@item.Id" onclick="checkedClick(this)">
           </th>
           <td>@item.Name</td>
-          <td>@item.Genre</td>
+          <td>@item.GenreName</td>
           <td>
             @(item.Active ? "Yes" : "No")
           </td>

@@ -7,6 +7,7 @@ using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Web.Interfaces.Rental;
 using Web.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Web.Controllers
 {
@@ -22,29 +23,36 @@ namespace Web.Controllers
         {
             _base_repository = baseRepository;
             _base_repository_rental = baseRepositoryRental;
-            
+
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
+            var userId = "001122";
+
             ViewBag.Title = "Rentals";
-            var model = await _base_repository.GetAll();
+            var model = _base_repository_rental.GetAll(x => x.Include(y => y.MovieRentals).ThenInclude(y => y.Movie).Where(x => x.UserId == userId));
             return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> Form(int? id)
         {            
-            var resultModel = await _base_repository.GetById(id);
-            ViewBag.Title = "Create rental";
-            resultModel.UserId = "001122";
+            var resultRental = _base_repository_rental.GetAll(x => x.Include(y => y.MovieRentals).ThenInclude(y => y.Movie).Where(x => x.Id == id)).FirstOrDefault();
+            var model = await _base_repository.GetRentalForm(resultRental);
 
-            return View(resultModel);
+            if(model.Id == 0){
+                ViewBag.Title = "Create rental";
+            } else {
+                ViewBag.Title = "Edit rental";
+            }
+                        
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateOrUpdate(RentalFormViewModel model)
         {
-            await _base_repository.Add(model);
+            await _base_repository.AddOrUpdate(model);
             // if (model.Id != 0)
             // {
             //     await _base_repository.Update(model);
@@ -53,7 +61,7 @@ namespace Web.Controllers
             // {
             //     model.DateRental = DateTime.Now;
             //     await _base_repository.Add(model);
-            
+
             // }
 
             return RedirectToAction("Index");

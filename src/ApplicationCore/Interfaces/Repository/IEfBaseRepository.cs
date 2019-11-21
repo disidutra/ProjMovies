@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace ApplicationCore.Interfaces
         Task<TEntity> GetById(int id);
         Task<IEnumerable<TEntity>> GetRangeById(IEnumerable<int> list);
         Task<IEnumerable<TEntity>> GetAll();
+        IEnumerable<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>> includeExpressions = null);
         Task Update(TEntity obj);
         Task Remove(TEntity obj);
         Task RemoveRange(IEnumerable<TEntity> obj);

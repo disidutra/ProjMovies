@@ -33,11 +33,12 @@ namespace Web
         {
             services.AddScoped(typeof(IEfBaseRepository<>), typeof(EfBaseRepository<>));
             services.AddScoped<IGenreRepository, GenreRepository>();
-               services.AddScoped<IRentalFormViewModelService, RentalFormViewModelService>();
-            
+            services.AddScoped<IMovieRepository, MovieRepository>();            
+            services.AddScoped<IRentalFormViewModelService, RentalFormViewModelService>();
+
             services.AddDbContext<ProjMoviesContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("Defaultconnection"), b => b.MigrationsAssembly("Infrastructure"));
+                options.UseSqlServer(Configuration.GetConnectionString("DBConnection"), b => b.MigrationsAssembly("Infrastructure"));
             });
 
             services.AddControllersWithViews();

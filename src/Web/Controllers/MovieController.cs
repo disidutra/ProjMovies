@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
+using ApplicationCore.Interfaces.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -13,16 +14,22 @@ namespace Web.Controllers
     {
         private readonly IEfBaseRepository<Movie> _base_repository;
         private readonly IEfBaseRepository<Genre> _base_repository_genre;
-        public MovieController(IEfBaseRepository<Movie> baseRepository, IEfBaseRepository<Genre> baseRepositoryGenre)
+        private readonly IMovieRepository _base_repository_movie;
+        public MovieController(
+            IEfBaseRepository<Movie> baseRepository,
+            IEfBaseRepository<Genre> baseRepositoryGenre,
+            IMovieRepository baseRepositoryMovie
+        )
         {
             _base_repository = baseRepository;
             _base_repository_genre = baseRepositoryGenre;
+            _base_repository_movie = baseRepositoryMovie;
         }
         public async Task<IActionResult> Index()
         {
-            ViewBag.Title = "Movies";
-            var model = await _base_repository.GetAll();
-            return View(model.OrderBy(x => x.Name));
+            ViewBag.Title = "Movies";            
+            var model = await _base_repository_movie.GetAll();
+            return View(model);
         }
 
         [HttpGet]
@@ -84,7 +91,7 @@ namespace Web.Controllers
         public async Task<IActionResult> DeleteRange(IEnumerable<int> items)
         {
             var itemsDelete = await _base_repository.GetRangeById(items);
-            
+
             if (itemsDelete.Any())
             {
                 await _base_repository.RemoveRange(itemsDelete);

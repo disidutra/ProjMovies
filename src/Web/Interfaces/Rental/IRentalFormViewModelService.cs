@@ -6,9 +6,10 @@ namespace Web.Interfaces.Rental
 {
     public interface IRentalFormViewModelService
     {
-        Task<IEnumerable<RentalFormViewModel>> GetAll();
-        Task<RentalFormViewModel> GetById(int? id);
-        Task Add(RentalFormViewModel obj);
+        // Task<IEnumerable<RentalFormViewModel>> GetAll();
+        // Task<IEnumerable<RentalFormViewModel>> GetAllByUserId();
+        Task<RentalFormViewModel> GetRentalForm(ApplicationCore.Entities.Rental obj);
+        Task AddOrUpdate(RentalFormViewModel obj);
 
     }
 }

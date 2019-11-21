@@ -44,10 +44,21 @@ namespace ApplicationCore.Services
             }
             return itemsResult;
         }
-        
+
         public async Task<IEnumerable<TEntity>> GetAll()
         {
             return await _base_context.Set<TEntity>().ToListAsync();
+        }
+
+        public IEnumerable<TEntity> GetAll(Func<IQueryable<TEntity>, IQueryable<TEntity>> includeExpressions = null)
+        {
+            var entities = _base_context.Set<TEntity>();
+
+            var query = includeExpressions is null
+                ? entities
+                : includeExpressions(entities);
+
+            return query.ToList();
         }
 
         public async Task Update(TEntity obj)
