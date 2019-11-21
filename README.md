@@ -20,5 +20,4 @@ dotnet ef database update -p src/Infrastructure/ -s src/Web/ -v
 ```
 dotnet run -p src/Web/
 ```
-* Após isso, abrir a url [http://localhost:5000](http://localhost:5000){:target="_blank"} no navegador de sua preferência.
-<a href="http://localhost:5000" target="_blank">http://localhost:5000</a>
+* Após isso, abrir a url [http://localhost:5000](http://localhost:5000) no navegador de sua preferência.
