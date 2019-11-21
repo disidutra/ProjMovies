@@ -1,4 +1,7 @@
 # ProjMovies
+* Tela de Filmes
+<img src="./Movies.png" />
+
 Para rodar o projeto é necessário:
 -----------
 * .net core 3.0
